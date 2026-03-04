@@ -1,0 +1,6 @@
+@EpicGamesBot_HostAddress = http://localhost:5053
+
+GET {{EpicGamesBot_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

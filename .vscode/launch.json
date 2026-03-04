@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run EpicGamesBot",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/bin/Debug/net10.0/EpicGamesBot.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ROOT": "/home/notebook/.dotnet"
+      }
+    }
+  ]
+}
