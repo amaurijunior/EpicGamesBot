@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
@@ -21,39 +19,34 @@ public class DiscordService
 
     public async Task SendDiscordMessage()
     {
-        var webhookUrl = _configuration["Discord:WebhookUrl"]
-            ?? throw new InvalidOperationException("Discord:WebhookUrl não configurado.");
+        var webhookUrl = _configuration["Discord:WebhookUrl"] ?? throw new InvalidOperationException("Discord:WebhookUrl não configurado.");
         var games = await _epicGamesService.GetFreeGames();
+        var embeds = new List<object>();
 
-        var fields = new List<object>();
-
-    var embeds = new List<object>();
-
-    foreach (var game in games)
-    {
-        embeds.Add(new
+        foreach (var game in games)
         {
-            title = game.Name,
-            description = string.IsNullOrWhiteSpace(game.Link) 
-                            ? game.description
-                            : $"🔗 [Resgatar aqui]({game.Link})\n\n{game.description}",
-            image = new
+            embeds.Add(new
             {
-                url = game.Image
-            },
-            color = 5793266, // azul
-            timestamp = DateTime.UtcNow
-        });
-    }
+                title = game.Name,
+                description = string.IsNullOrWhiteSpace(game.Link) 
+                                ? game.description
+                                : $"🔗 [Resgatar aqui]({game.Link})\n\n{game.description}",
+                image = new
+                {
+                    url = game.Image
+                },
+                color = 5793266, // azul
+                timestamp = DateTime.UtcNow
+            });
+        }
 
-    var payload = new
-    {
-        content = "🎮 Os Jogos Consolidados dessa semana https://store.epicgames.com/pt-BR/free-games 🎮",
-        embeds = embeds
-    };
+        var payload = new
+        {
+            content = "🎮 Os Jogos Consolidados dessa semana https://store.epicgames.com/pt-BR/free-games 🎮",
+            embeds = embeds
+        };
 
-        var json = JsonSerializer.Serialize(payload);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
         await _httpClient.PostAsync(webhookUrl, content);
     }
