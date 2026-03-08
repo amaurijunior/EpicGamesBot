@@ -15,6 +15,15 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_ROOT": "/home/notebook/.dotnet"
       }
+    },
+    {
+      "name": "Containers: .NET Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "netCore": {
+        "appProject": "${workspaceFolder}/EpicGamesBot.csproj"
+      }
     }
   ]
 }
