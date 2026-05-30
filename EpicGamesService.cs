@@ -72,11 +72,20 @@ public class EpicGamesService : IEpicGamesService
                         string? imageUrl = null;
                         if (game.TryGetProperty("keyImages", out var images))
                         {
+                            var preferredTypes = new[] { "Thumbnail", "OfferImageWide", "DieselStoreFrontWide", "OfferImageTall" };
+                            var imageMap = new Dictionary<string, string>();
                             foreach (var img in images.EnumerateArray())
                             {
-                                if (img.GetProperty("type").GetString() == "Thumbnail")
+                                var imgType = img.GetProperty("type").GetString();
+                                var imgUrl = img.GetProperty("url").GetString();
+                                if (imgType != null && imgUrl != null)
+                                    imageMap[imgType] = imgUrl;
+                            }
+                            foreach (var preferred in preferredTypes)
+                            {
+                                if (imageMap.TryGetValue(preferred, out var foundUrl))
                                 {
-                                    imageUrl = img.GetProperty("url").GetString();
+                                    imageUrl = foundUrl;
                                     break;
                                 }
                             }
